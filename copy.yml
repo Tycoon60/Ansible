@@ -1,0 +1,27 @@
+---
+- name: Copy file to hosts
+  hosts: mypc
+  become: yes
+
+  vars:
+    source_file: /tmp/11
+    destin_file: /tmp/
+
+  tasks:
+  - name: Copy file1
+    copy:
+      src={{ source_file }}
+      dest={{ destin_file }}
+      #owner: tycoon
+      #group: tycoon
+      #mode=644
+
+
+  - shell: |
+      chown -R tycoon:tycoon {{ destin_file }}
+      chmod -R 644 {{ destin_file }}
+      ls -la {{ destin_file }}
+    register: results
+
+  - debug:
+      var: results.stdout_lines
