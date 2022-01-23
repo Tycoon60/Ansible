@@ -1,0 +1,8 @@
+---
+- name: shutdown/reboot
+  hosts: mypc
+  become: yes
+
+  tasks:
+  - name: shutdown/reboot
+    shell: poweroff

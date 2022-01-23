@@ -1,0 +1,13 @@
+---
+- name: Copy file to hosts Perekrestok, Chelsi
+  hosts: mypc
+  become: yes
+
+  tasks:
+  - name: install programm
+    apt: name={{ item }} state=latest
+    with_items:
+      - ttf-mscorefonts-installer
+      - ssh
+      - mc
+      - nfs-common
