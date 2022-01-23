@@ -1,0 +1,26 @@
+---
+- name: sripts
+  hosts: mypc
+  become: yes
+
+  vars:
+    source_file1: ~/git/bash/service/check_net.service
+    desin_file1: /etc/systemd/system/
+    source_file2: ~/git/bash/service/check_net.sh
+    desin_file2: /etc/
+
+  tasks:
+  - name: Copy1
+    copy: src={{ source_file1 }} dest={{ desin_file1 }}
+
+  - name: Copy2
+    copy: src={{ source_file2 }} dest={{ desin_file2 }}
+  
+  - name: chmod
+    shell: chmod +x /etc/check_net.sh
+
+  - name: daemon reload
+    shell: systemctl daemon-reload
+
+  - name: systemctl enable
+    shell: systemctl enable check_net.service
