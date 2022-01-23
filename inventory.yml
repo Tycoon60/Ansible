@@ -1,0 +1,29 @@
+---
+- name: inventory
+  hosts: mypc
+  become: yes
+
+  vars:
+    source_file: ~/git/bash/inventory.sh
+    destin_folder: /tmp
+
+  tasks:
+  - name: Copy file to hosts
+    copy: src={{ source_file }} dest={{ destin_folder }} mode=644
+
+  - shell: |
+      sh /tmp/inventory.sh
+    register: results
+
+  - name: Remove file hosts
+    file: "path=/tmp/inventory.sh state=absent"
+
+#  - debug:
+#      var: results.stdout_lines
+
+  - local_action:
+      module: lineinfile
+      dest: "/etc/ansible/inventory/inventory.txt"
+      line: " {{ results.stdout_lines }}"
+      create: yes
+
