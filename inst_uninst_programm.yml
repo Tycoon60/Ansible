@@ -1,0 +1,30 @@
+
+---
+- name: Copy file to hosts
+  hosts: mypc
+  become: yes
+
+  tasks:
+  
+  - name: Chek and print linux version
+    debug: var=ansible_os_family
+
+  - block: # ====Block for RedHat====
+      
+        - name: install programm
+          yum: name={{ item }} state=latest
+          #yum: name={{ item }} state=absent
+          with_items:
+                - mc
+    when: ansible_os_family == "RedHat"
+
+
+  - block: # ====Block for Debian====
+
+        - name: install programm
+          apt: name={{ item }} state=latest
+          #apt: name={{ item }} state=absent
+          with_items:
+                - mc
+    when: ansible_os_family == "Debian"
+ 
