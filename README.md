@@ -1,16 +1,12 @@
 Installing Ansible on Ubuntu
 
-sudo apt update && sudo apt install software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible
+sudo apt update && sudo apt install software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible && sudo apt install -y python3-pip
 
 Отключить проверку ключей (fingerprint) при подключении:
 cat > /etc/ansible/ansible.cfg <<EOF
 [defaults]
 host_key_checking = False
 EOF
-
-
-
-
 
 
 mkdir /etc/ansible/group_vars
@@ -26,3 +22,7 @@ cat > /etc/ansible/hosts <<EOF
 EOF
 
 Проверка: ansible test -m ping
+
+
+Установка ansible-lint(для проверки кода):
+pip3 install "ansible-lint[core,yamllint]"
