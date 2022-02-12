@@ -1,0 +1,11 @@
+---
+- name: shutdown/reboot
+  hosts: test
+  become: yes
+
+  tasks:
+#  - name: reboot
+#    reboot: 
+
+  - name: shutdown
+    community.general.shutdown:
