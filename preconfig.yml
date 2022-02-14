@@ -6,10 +6,10 @@
   tasks:
     - name: Установка Docker
       block:
-        #- name: Добавляем universe репозиторий
-        #  apt_repository:
-        #    repo: "deb http://ru.archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
-        #    state: present
+        - name: Добавляем universe репозиторий
+          apt_repository:
+            repo: "deb http://ru.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe"
+            state: present
 
         - name: Установка дополнительных пакетов
           apt:
@@ -19,21 +19,18 @@
               - curl
               - gnupg
               - lsb-release
-            update-cache: true 
+            update-cache: yes 
             cache_valid_time: 864000
       
         - name: Добавление ключа Docker
           apt_key:
-            url: https://download.docker.com/linux/ubuntu/gpg   
+            url: https://download.docker.com/linux/ubuntu/gpg
             state: present
-            keyring: /usr/share/keyrings/dcoker-archive-keyring.gpg
+            keyring: /usr/share/keyrings/docker-archive-keyring.gpg
 
         - name: Установка стабильного репозитория
           apt_repository:
-            repo: >
-              deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]
-              https://download.docker.com/linux/ubuntu
-              {{ ansible_distribution_release }} stable
+            repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
             state: present
             update-cache: true
             filename: docker
@@ -42,7 +39,7 @@
         - name: Установка docker-ce
           apt:
             name: docker-ce
-            update-cashe: yes
+            update-cache: yes
 
         - name: Проверка установки docker-ce
           service:
@@ -56,13 +53,13 @@
       block:
         - name: Получение последней версии Docker-compose
           uri:
-            url: https://api/github.com/repos/docker/compose/releases/latest
+            url: https://api.github.com/repos/docker/compose/releases/latest
             body_format: json
           register: page
 
         - name: Установка Docker-compose
           get_url:
-            url: "https://github.com/docker/compose/releasesdownload/{{ page.json.tag._name }}/docker-compose-Linux-x86_64"
+            url: "https://github.com/docker/compose/releases/download/{{ page.json.tag_name }}/docker-compose-Linux-x86_64"
             dest: /usr/local/bin/docker-compose
             mode: 0755
 
@@ -70,7 +67,7 @@
       block:
         - name: Добавление пользователя в группу Docker
           user:
-            name: "{{ ansible_user }}"
+            name: "{{ansible_user}}"
             groups: docker
             append: yes
 
