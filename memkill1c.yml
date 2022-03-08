@@ -1,0 +1,27 @@
+---
+- name: cron
+  hosts: test
+  become: yes
+
+  tasks:
+
+  - name: "@reboot /home/memkill1c.sh"
+    ansible.builtin.cron:
+      name: "a job for reboot"
+      special_time: reboot
+      job: "/home/memkill1c.sh"
+
+
+  - name: Copy file
+    ansible.builtin.copy:
+      src: /home/memkill1c.sh
+      dest: /home/memkill1c.sh
+      owner: root
+      group: root
+      mode: '0744'
+
+
+  - name: run script
+    command: sh /home/memkill1c.sh
+    async: 1
+    poll: 0
